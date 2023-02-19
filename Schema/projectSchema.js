@@ -5,6 +5,7 @@ const projectSchema = new mongoose.Schema(
       type: String,
       maxlength: 20,
       required: [true, 'A project must have a name'],
+      unique: true,
       default: 'alpha',
     },
     type: {
@@ -25,12 +26,12 @@ const projectSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      required: [true, 'A project must have an image.'],
       default:
         'https://plus.unsplash.com/premium_photo-1661542769747-4c6aaf601135?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzE5fHxidWlsZGluZyUyMGNvbnN0cnVjdGlvbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
     },
     author: {
       type: String,
+      maxlength: 25,
       default: 'Homerun Inc.',
     },
   },
