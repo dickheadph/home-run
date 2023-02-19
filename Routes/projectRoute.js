@@ -3,8 +3,9 @@ const router = express();
 const projectRoute = require('../Controller/projectControler');
 const { getAll, getSingleProject, addProject, editProject, deleteProject } =
   projectRoute;
+const uploadImage = require('../Utility/imageUpload');
 
-router.route('/').get(getAll).post(addProject);
+router.route('/').get(getAll).post(uploadImage, addProject);
 router
   .route('/:projectId')
   .get(getSingleProject)

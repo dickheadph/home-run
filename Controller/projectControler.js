@@ -1,6 +1,7 @@
 const Projects = require('../Schema/projectSchema');
 const AsyncHandler = require('express-async-handler');
 const AppErr = require('../Middlewares/AppError');
+const cloudinary = require('cloudinary').v2;
 
 exports.getAll = AsyncHandler(async (req, res, next) => {
   const projects = await Projects.find();
@@ -16,17 +17,35 @@ exports.getSingleProject = AsyncHandler(async (req, res, next) => {
 });
 
 exports.addProject = AsyncHandler(async (req, res, next) => {
-  const { name, type, category, image, author } = req.body;
+  const { name, type, category, author } = req.body;
+
+  let imageData;
+
+  if (req.file) {
+    cloudinary.config({
+      cloud_name: process.env.CLOUD_NAME,
+      api_key: process.env.API_KEY,
+      api_secret: process.env.API_SECRET,
+      secure: true,
+    });
+
+    imageData = await cloudinary.uploader.upload(req.file.path, {
+      folder: 'Homerun',
+      resource_type: 'image',
+    });
+  }
+
   const newProject = await Projects.create({
     name,
     type,
     category,
-    image,
+    image: imageData.secure_url,
     author,
   });
   if (!newProject) {
     return next(new AppErr('Failed to add project. Please try again', 403));
   }
+
   res.status(201).json({
     message: 'success',
     newProject,

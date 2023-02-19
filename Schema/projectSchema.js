@@ -10,7 +10,7 @@ const projectSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      maxlength: 10,
+      maxlength: 20,
       required: [true, 'A project must have a type'],
       default: 'construction',
     },
