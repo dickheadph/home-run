@@ -5,6 +5,9 @@ const cloudinary = require('cloudinary').v2;
 
 exports.getAll = AsyncHandler(async (req, res, next) => {
   const projects = await Projects.find();
+  if (!projects) {
+    return next(new AppErr('Invalid request.', 403));
+  }
   res.status(200).json(projects);
 });
 
