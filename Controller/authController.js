@@ -2,6 +2,7 @@ const AsyncHandler = require('express-async-handler');
 const AppErr = require('../Middlewares/AppError');
 const User = require('../Schema/userSchema');
 const imageUpload = require('../Utility/imageUpload');
+const jwt = require('jsonwebtoken');
 
 exports.userSignup = AsyncHandler(async (req, res, next) => {
   const { name, email, password, confirmPassword } = req.body;
@@ -54,6 +55,23 @@ exports.userLogin = AsyncHandler(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     token,
-    profile: user,
   });
+});
+
+exports.protectRoute = AsyncHandler(async (req, res, next) => {
+  const header = req.headers.authorization;
+  let token;
+  if (header && header.startsWith('Bearer')) {
+    token = header.split(' ')[1];
+  }
+  if (!token) {
+    return next(new AppErr('You are not allowed to access this path.', 403));
+  }
+  const credentials = jwt.verify(token, process.env.SECRET_KEY);
+  console.log(credentials);
+  if (!credentials) {
+    return next(new AppErr('Token has expired or is invalid.', 403));
+  }
+
+  next();
 });
