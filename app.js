@@ -5,8 +5,10 @@ const app = express();
 app.use(express.json());
 
 const projectRoute = require('./Routes/projectRoute');
+const usersRoute = require('./Routes/userRoute');
 
-app.use('/projects', projectRoute);
+app.use('/homerun/projects', projectRoute);
+app.use('/homerun/users', usersRoute);
 
 app.all('*', (req, res, next) => {
   return next(

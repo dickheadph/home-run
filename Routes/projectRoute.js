@@ -7,7 +7,7 @@ const uploadImage = require('../Utility/imageUpload');
 
 router.route('/').get(getAll).post(uploadImage, addProject);
 router
-  .route('/:projectId')
+  .route('/:id')
   .get(getSingleProject)
   .patch(editProject)
   .delete(deleteProject);

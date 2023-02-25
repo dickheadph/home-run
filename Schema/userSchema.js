@@ -9,7 +9,6 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      maxlength: 25,
       unique: true,
       lowercase: true,
       required: true,
@@ -25,7 +24,7 @@ const userSchema = new mongoose.Schema(
     active: {
       type: Boolean,
       default: true,
-      select: false,
+      select: true,
     },
     photo: {
       type: String,
@@ -58,4 +57,4 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.models['User'] || mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema);
