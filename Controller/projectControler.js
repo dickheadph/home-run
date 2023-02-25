@@ -1,7 +1,7 @@
 const Projects = require('../Schema/projectSchema');
 const AsyncHandler = require('express-async-handler');
 const AppErr = require('../Middlewares/AppError');
-const cloudinary = require('cloudinary').v2;
+const imageUpload = require('../Utility/imageUpload');
 
 exports.getAll = AsyncHandler(async (req, res, next) => {
   const projects = await Projects.find();
@@ -22,27 +22,13 @@ exports.getSingleProject = AsyncHandler(async (req, res, next) => {
 exports.addProject = AsyncHandler(async (req, res, next) => {
   const { name, type, category, author } = req.body;
 
-  let imageData;
-
-  if (req.file) {
-    cloudinary.config({
-      cloud_name: process.env.CLOUD_NAME,
-      api_key: process.env.API_KEY,
-      api_secret: process.env.API_SECRET,
-      secure: true,
-    });
-
-    imageData = await cloudinary.uploader.upload(req.file.path, {
-      folder: 'Homerun',
-      resource_type: 'image',
-    });
-  }
+  const imageUrl = await imageUpload(req, 'Homerun');
 
   const newProject = await Projects.create({
     name,
     type,
     category,
-    image: imageData.secure_url,
+    image: imageUrl,
     author,
   });
   if (!newProject) {
@@ -56,7 +42,12 @@ exports.addProject = AsyncHandler(async (req, res, next) => {
 });
 
 exports.editProject = AsyncHandler(async (req, res, next) => {
-  const { name, type, category, image, author } = req.body;
+  const { name, type, category, author } = req.body;
+
+  const imageUrl = await imageUpload(req, 'Homerun');
+  const currentCover = await Projects.findById(req.params.projectId).select(
+    '+image'
+  );
 
   const updatedProject = await Projects.findByIdAndUpdate(
     req.params.projectId,
@@ -64,7 +55,7 @@ exports.editProject = AsyncHandler(async (req, res, next) => {
       name,
       type,
       category,
-      image,
+      image: req.file ? imageUrl : currentCover.image,
       author,
     },
     {

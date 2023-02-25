@@ -1,7 +1,7 @@
 const AsyncHandler = require('express-async-handler');
 const AppErr = require('../Middlewares/AppError');
 const User = require('../Schema/userSchema');
-const cloudinary = require('cloudinary').v2;
+const imageUpload = require('../Utility/imageUpload');
 
 exports.userSignup = AsyncHandler(async (req, res, next) => {
   const { name, email, password, confirmPassword } = req.body;
@@ -12,27 +12,15 @@ exports.userSignup = AsyncHandler(async (req, res, next) => {
     throw new Error('Email already in use. Please use another account.');
   }
 
-  let imageData;
-  if (req.file) {
-    cloudinary.config({
-      cloud_name: process.env.CLOUD_NAME,
-      api_key: process.env.API_KEY,
-      api_secret: process.env.API_SECRET,
-      secure: true,
-    });
+  const imageUrl = await imageUpload(req, 'Users_Homerun');
 
-    imageData = await cloudinary.uploader.upload(req.file.path, {
-      folder: 'Users_Homerun',
-      resource_type: 'image',
-    });
-  }
   //Create user profile
   const newUser = await User.create({
     name,
     email,
     password,
     confirmPassword,
-    image: imageData.secure_url,
+    image: imageUrl,
   });
 
   if (!newUser) {

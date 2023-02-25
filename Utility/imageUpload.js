@@ -1,30 +1,21 @@
-const multer = require('multer');
-const AppError = require('../Middlewares/AppError');
-//const AsyncHandler = require('../Middlewares/AsyncHandler');
+const cloudinary = require('cloudinary').v2;
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, '/Users/Public');
-  },
-  filename: (req, file, cb) => {
-    const type = file.mimetype.split('/')[1];
-    const name = file.originalname.split('.')[0];
-    cb(null, `Project-${name}-${Date.now()}.${type}`);
-  },
-});
+const imageUpload = async (req, folder) => {
+  let imageData;
+  if (req.file) {
+    cloudinary.config({
+      cloud_name: process.env.CLOUD_NAME,
+      api_key: process.env.API_KEY,
+      api_secret: process.env.API_SECRET,
+      secure: true,
+    });
 
-// const storage = multer.memoryStorage();
-
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image')) {
-    cb(null, true);
-  } else {
-    cb(new AppError('Not an image. Please select an image.', 403));
+    imageData = await cloudinary.uploader.upload(req.file.path, {
+      folder: folder,
+      resource_type: 'image',
+    });
   }
+  return imageData.secure_url;
 };
-const upload = multer({
-  storage,
-  fileFilter,
-});
 
-module.exports = upload.single('image');
+module.exports = imageUpload;
