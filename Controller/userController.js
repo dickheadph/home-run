@@ -29,16 +29,3 @@ exports.getOneUser = AsyncHandler(async (req, res, next) => {
   });
 });
 
-exports.addNewUser = AsyncHandler(async (req, res, next) => {
-  const { name, email, password, confirmPassword } = req.body;
-  const newUser = User.create({ name, email, password, confirmPassword });
-
-  if (!newUser) {
-    return next(new AppErr('Failed to Create User profile', 403));
-  }
-  res.status(201).json({
-    message: 'success',
-    newUser,
-  });
-});
-
