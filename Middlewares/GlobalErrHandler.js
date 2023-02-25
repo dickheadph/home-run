@@ -52,7 +52,7 @@ const prodErr = (err, req, res) => {
 
 module.exports = (err, req, res, next) => {
   this.statusCode = err.statusCode || 500; //fail
-  this.status = err.status || 'error';
+  this.status = err.status || 'failed';
   this.message = err.message;
 
   res.status(this.statusCode).json({

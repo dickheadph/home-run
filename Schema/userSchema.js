@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const { use } = require('../Routes/userRoute');
+const jwt = require('jsonwebtoken');
+//const SECRET_KEY = process.env.SECRET_KEY;
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      maxlength: 25,
+      maxlength: 30,
       required: [true, 'A user must have a name.'],
     },
     email: {
@@ -27,7 +28,7 @@ const userSchema = new mongoose.Schema(
       default: true,
       select: true,
     },
-    photo: {
+    image: {
       type: String,
       default:
         'https://images.unsplash.com/photo-1641391503184-a2131018701b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NjR8fGRlZmF1bHQlMjBpbWFnZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
@@ -36,6 +37,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       minlength: 8,
       required: [true, 'Please provide a strong password.'],
+      select: false,
     },
     confirmPassword: {
       type: String,
@@ -78,5 +80,7 @@ userSchema.methods.comparePassword = async function (
 ) {
   return await bcrypt.compare(stringPassword, hashedPassword);
 };
-
+userSchema.methods.generateJWToken = function (userId) {
+  return jwt.sign({ userId }, process.env.SECRET_KEY, { expiresIn: '1d' });
+};
 module.exports = mongoose.model('User', userSchema);
