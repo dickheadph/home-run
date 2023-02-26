@@ -14,7 +14,7 @@ exports.getAll = AsyncHandler(async (req, res, next) => {
 exports.getSingleProject = AsyncHandler(async (req, res, next) => {
   const project = await Projects.findById(req.params.id);
   if (!project) {
-    return next(new AppErr('No project found that Id.', 404));
+    throw new Error('No project found that Id.');
   }
   res.status(200).json(project);
 });
@@ -53,9 +53,7 @@ exports.editProject = AsyncHandler(async (req, res, next) => {
   const { name, type, category, author } = req.body;
 
   const imageUrl = await imageUpload(req, 'Homerun');
-  const currentCover = await Projects.findById(req.params.projectId).select(
-    '+image'
-  );
+  const currentCover = await Projects.findById(req.params.id).select('+image');
 
   const updatedProject = await Projects.findByIdAndUpdate(
     req.params.projectId,
@@ -85,6 +83,7 @@ exports.editProject = AsyncHandler(async (req, res, next) => {
 exports.deleteProject = AsyncHandler(async (req, res, next) => {
   await Projects.findByIdAndDelete(req.params.id);
   res.status(201).json({
+    status: 'success',
     data: null,
   });
 });
