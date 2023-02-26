@@ -68,10 +68,19 @@ exports.protectRoute = AsyncHandler(async (req, res, next) => {
     return next(new AppErr('You are not allowed to access this path.', 403));
   }
   const credentials = jwt.verify(token, process.env.SECRET_KEY);
-  console.log(credentials);
-  if (!credentials) {
+
+  const expiryTime = parseInt(credentials.exp, 10);
+  const currentTime = parseInt(Date.now() / 1000, 10);
+  //current time 9 and expiry time 10 -> valid
+  const isTokenValid = expiryTime > currentTime;
+
+  if (!isTokenValid) {
     return next(new AppErr('Token has expired or is invalid.', 403));
   }
+
+  const currentUser = await User.findById(credentials.userId);
+
+  req.user = currentUser;
 
   next();
 });
