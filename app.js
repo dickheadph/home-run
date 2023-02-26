@@ -8,7 +8,11 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'https://homerun-eight.vercel.app/'],
+    origin: [
+      'http://localhost:3000',
+      'https://homerun-eight.vercel.app/',
+      'https://home-run.onrender.com',
+    ],
   })
 );
 const projectRoute = require('./Routes/projectRoute');

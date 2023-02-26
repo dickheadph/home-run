@@ -4,7 +4,6 @@ const User = require('../Schema/userSchema');
 const imageUpload = require('../Utility/imageUpload');
 const jwt = require('jsonwebtoken');
 
-
 exports.userSignup = AsyncHandler(async (req, res, next) => {
   const { name, email, password, confirmPassword } = req.body;
   //Check if email is already in use
@@ -12,15 +11,6 @@ exports.userSignup = AsyncHandler(async (req, res, next) => {
   if (account) {
     throw new Error('Email already in use. Please use another account.');
   }
-
-  // req.file.name = `${name.split(' ')[0]}-${parseInt(Date.now() / 1000, 10)}`;
-  // sharp(req.file.buffer)
-  //   .resize(500, 500)
-  //   .jpeg({ quality: 50 })
-  //   .toFormat('jpeg')
-  //   .toFile(`/Users/Public/${req.file.name}`);
-
-  //console.log(req.file);
   const imageUrl = await imageUpload(req, 'Users_Homerun', name);
 
   //Create user profile

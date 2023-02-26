@@ -3,7 +3,6 @@ const sharp = require('sharp');
 
 const imageUpload = async (req, folder, name) => {
   let imageData;
-  console.log(req.file.path);
   if (req.file) {
     cloudinary.config({
       cloud_name: process.env.CLOUD_NAME,
