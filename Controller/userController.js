@@ -18,7 +18,7 @@ exports.getUsers = AsyncHandler(async (req, res, next) => {
 exports.getOneUser = AsyncHandler(async (req, res, next) => {
   //console.log(req.users.id);
   const user = await User.findOne(req.users);
-  console.log(user);
+  //console.log(user);
   if (!user) {
     return next(new AppErr('No User found with that Id', 403));
   }

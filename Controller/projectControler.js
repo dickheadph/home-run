@@ -2,7 +2,7 @@ const Projects = require('../Schema/projectSchema');
 const AsyncHandler = require('express-async-handler');
 const AppErr = require('../Middlewares/AppError');
 const imageUpload = require('../Utility/imageUpload');
-
+const sharp = require('sharp');
 exports.getAll = AsyncHandler(async (req, res, next) => {
   const projects = await Projects.find();
   if (!projects) {
@@ -12,15 +12,23 @@ exports.getAll = AsyncHandler(async (req, res, next) => {
 });
 
 exports.getSingleProject = AsyncHandler(async (req, res, next) => {
-  const project = await Projects.findOne(req.projects);
+  const project = await Projects.findById(req.params.id);
   if (!project) {
-    return next(new AppErr('No project found that Id.', 403));
+    return next(new AppErr('No project found that Id.', 404));
   }
   res.status(200).json(project);
 });
 
 exports.addProject = AsyncHandler(async (req, res, next) => {
   const { name, type, category, author } = req.body;
+
+  req.file.filename = `${name}`;
+  sharp(req.file.buffer)
+    .toFormat('jpg')
+    .jpeg({ quality: 50 })
+    .toFile(`/Users/Public/${req.file.filename}.jpg`);
+
+  console.log(req.file);
 
   const imageUrl = await imageUpload(req, 'Homerun');
 
