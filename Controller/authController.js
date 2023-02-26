@@ -22,7 +22,7 @@ exports.userSignup = AsyncHandler(async (req, res, next) => {
     .resize(500, 500)
     .toFormat('jpg')
     .jpeg({ quality: 50 })
-    .toFile(`/Users/Public/${req.file.filename}.jpg`);
+    .toFile(`${process.env.DIRECTORY_PATH}/${req.file.filename}.jpg`);
 
   const imageUrl = await imageUpload(req, 'Users_Homerun');
   //Create user profile

@@ -28,4 +28,3 @@ exports.getOneUser = AsyncHandler(async (req, res, next) => {
     user,
   });
 });
-

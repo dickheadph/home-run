@@ -11,15 +11,8 @@ const imageUpload = async (req, folder) => {
       secure: true,
     });
 
-    // req.file.name = `${name.split(' ')[0]}-${parseInt(Date.now() / 1000, 10)}`;
-    // sharp(req.file.buffer)
-    //   .resize(500, 500)
-    //   .jpeg({ quality: 50 })
-    //   .toFormat('jpeg')
-    //   .toFile(`/Users/Public/${req.file.name}`);
-
     imageData = await cloudinary.uploader.upload(
-      `/Users/Public/${req.file.filename}.jpg`,
+      `${process.env.DIRECTORY_PATH}/${req.file.filename}.jpg`,
       {
         folder: folder,
         resource_type: 'image',

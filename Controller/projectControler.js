@@ -21,14 +21,14 @@ exports.getSingleProject = AsyncHandler(async (req, res, next) => {
 
 exports.addProject = AsyncHandler(async (req, res, next) => {
   const { name, type, category, author } = req.body;
-
+  console.log(process.env.DIRECTORY_PATH);
   req.file.filename = `${name}`;
   sharp(req.file.buffer)
     .toFormat('jpg')
     .jpeg({ quality: 50 })
-    .toFile(`/Users/Public/${req.file.filename}.jpg`);
+    .toFile(`${process.env.DIRECTORY_PATH}/${req.file.filename}.jpg`);
 
-  console.log(req.file);
+  // console.log(req.file);
 
   const imageUrl = await imageUpload(req, 'Homerun');
 
@@ -83,7 +83,7 @@ exports.editProject = AsyncHandler(async (req, res, next) => {
 });
 
 exports.deleteProject = AsyncHandler(async (req, res, next) => {
-  await Projects.findByIdAndDelete(req.params.projectId);
+  await Projects.findByIdAndDelete(req.params.id);
   res.status(201).json({
     data: null,
   });
