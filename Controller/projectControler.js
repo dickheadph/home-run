@@ -12,7 +12,7 @@ exports.getAll = AsyncHandler(async (req, res, next) => {
 });
 
 exports.getSingleProject = AsyncHandler(async (req, res, next) => {
-  const project = await Projects.findById(req.params.projectId);
+  const project = await Projects.findOne(req.projects);
   if (!project) {
     return next(new AppErr('No project found that Id.', 403));
   }
