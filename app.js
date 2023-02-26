@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const GlobalErrHandler = require('./Middlewares/GlobalErrHandler');
+//const GlobalErrHandler = require('./Middlewares/GlobalErrHandler');
 const AppErr = require('./Middlewares/AppError');
 const app = express();
 app.use(express.json());
@@ -29,6 +29,6 @@ app.all('*', (req, res, next) => {
   );
 });
 
-app.use(GlobalErrHandler);
+// app.use(GlobalErrHandler);
 
 module.exports = app;

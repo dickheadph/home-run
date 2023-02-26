@@ -21,7 +21,7 @@ exports.getSingleProject = AsyncHandler(async (req, res, next) => {
 
 exports.addProject = AsyncHandler(async (req, res, next) => {
   const { name, type, category, author } = req.body;
-  console.log(process.env.DIRECTORY_PATH);
+
   req.file.filename = `${name}`;
   sharp(req.file.buffer)
     .toFormat('jpg')
