@@ -3,16 +3,28 @@ const AppErr = require('../Middlewares/AppError');
 const User = require('../Schema/userSchema');
 const imageUpload = require('../Utility/imageUpload');
 const jwt = require('jsonwebtoken');
+const sharp = require('sharp');
 
 exports.userSignup = AsyncHandler(async (req, res, next) => {
   const { name, email, password, confirmPassword } = req.body;
+  //console.log(req.file);
   //Check if email is already in use
   const account = await User.findOne({ email });
   if (account) {
     throw new Error('Email already in use. Please use another account.');
   }
-  const imageUrl = await imageUpload(req, 'Users_Homerun', name);
 
+  req.file.filename = `${name.split(' ')[0]}-${parseInt(
+    Date.now() / 1000,
+    10
+  )}`;
+  sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat('jpg')
+    .jpeg({ quality: 50 })
+    .toFile(`/Users/Public/${req.file.filename}.jpg`);
+
+  const imageUrl = await imageUpload(req, 'Users_Homerun');
   //Create user profile
   const newUser = await User.create({
     name,
@@ -23,9 +35,8 @@ exports.userSignup = AsyncHandler(async (req, res, next) => {
   });
 
   if (!newUser) {
-    return next(new Error('Failed creating Account. Please try again.'));
+    throw new Error('Failed creating Account. Please try again.');
   }
-  console.log(newUser);
   const token = newUser.generateJWToken(newUser.id);
 
   res.status(201).json({

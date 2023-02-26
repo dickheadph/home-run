@@ -1,8 +1,8 @@
 const cloudinary = require('cloudinary').v2;
-const sharp = require('sharp');
 
-const imageUpload = async (req, folder, name) => {
+const imageUpload = async (req, folder) => {
   let imageData;
+  console.log(req.file);
   if (req.file) {
     cloudinary.config({
       cloud_name: process.env.CLOUD_NAME,
@@ -11,15 +11,15 @@ const imageUpload = async (req, folder, name) => {
       secure: true,
     });
 
-    req.file.name = `${name.split(' ')[0]}-${parseInt(Date.now() / 1000, 10)}`;
-    sharp(req.file.buffer)
-      .resize(500, 500)
-      .jpeg({ quality: 50 })
-      .toFormat('jpeg')
-      .toFile(`/Users/Public/${req.file.name}`);
+    // req.file.name = `${name.split(' ')[0]}-${parseInt(Date.now() / 1000, 10)}`;
+    // sharp(req.file.buffer)
+    //   .resize(500, 500)
+    //   .jpeg({ quality: 50 })
+    //   .toFormat('jpeg')
+    //   .toFile(`/Users/Public/${req.file.name}`);
 
     imageData = await cloudinary.uploader.upload(
-      `/Users/Public/${req.file.name}`,
+      `/Users/Public/${req.file.filename}.jpg`,
       {
         folder: folder,
         resource_type: 'image',
