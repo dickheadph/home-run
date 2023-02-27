@@ -26,10 +26,10 @@ exports.addProject = AsyncHandler(async (req, res, next) => {
   sharp(req.file.buffer)
     .toFormat('jpg')
     .jpeg({ quality: 50 })
+    //.toFile(`${process.env.DIRECTORY_PATH}/${req.file.filename}.jpg`);
     .toFile(`${process.env.DIRECTORY_PATH}/${req.file.filename}.jpg`);
 
-  // console.log(req.file);
-
+  console.log(req.file);
   const imageUrl = await imageUpload(req, 'Homerun');
 
   const newProject = await Projects.create({
