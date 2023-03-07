@@ -2,7 +2,7 @@ const cloudinary = require('cloudinary').v2;
 
 const imageUpload = async (req, folder) => {
   let imageData;
-  // console.log(req.file);
+  console.log(req.file);
   if (req.file) {
     cloudinary.config({
       cloud_name: process.env.CLOUD_NAME,
