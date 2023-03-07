@@ -21,7 +21,7 @@ const usersRoute = require('./Routes/userRoute');
 app.use('/homerun/projects', projectRoute);
 app.use('/homerun/users', usersRoute);
 
-app.all('*', (req, res, next) => {
+app.all('*', (err, req, res, next) => {
   return next(
     new AppErr(
       `Cannot find ${req.originalUrl} endpoit. Refer to API Documentation.`

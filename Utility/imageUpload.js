@@ -3,6 +3,7 @@ const cloudinary = require('cloudinary').v2;
 const imageUpload = async (req, folder) => {
   let imageData;
   console.log(req.file);
+  const ext = req.file.mimetype.split('/')[1];
   if (req.file) {
     cloudinary.config({
       cloud_name: process.env.CLOUD_NAME,
@@ -10,14 +11,10 @@ const imageUpload = async (req, folder) => {
       api_secret: process.env.API_SECRET,
       secure: true,
     });
-
-    imageData = await cloudinary.uploader.upload(
-      `${process.env.DIRECTORY_PATH}/${req.file.filename}`,
-      {
-        folder: folder,
-        resource_type: 'image',
-      }
-    );
+    imageData = await cloudinary.uploader.upload(req.file.path, {
+      folder: folder,
+      resource_type: 'image',
+    });
   }
   return imageData.secure_url;
 };

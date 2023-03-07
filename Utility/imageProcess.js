@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const type = file.mimetype.split('/')[1];
     const name = file.originalname.split('.')[0];
-    cb(null, `Project-${name}-${parseInt(Date.now() / 1000, 10)}.${type}`);
+    cb(null, `${name}-${parseInt(Date.now() / 1000, 10)}.${type}`);
   },
 });
 
