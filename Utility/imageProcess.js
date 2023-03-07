@@ -4,7 +4,7 @@ const AppError = require('../Middlewares/AppError');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, `${process.env.DIRECTORY_PATH}/`);
+    cb(null, `${process.env.DIRECTORY_PATH}`);
   },
   filename: (req, file, cb) => {
     const type = file.mimetype.split('/')[1];
