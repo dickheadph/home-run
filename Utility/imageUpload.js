@@ -2,6 +2,7 @@ const cloudinary = require('cloudinary').v2;
 
 const imageUpload = async (req, folder) => {
   let imageData;
+  console.log(req.file);
   if (req.file) {
     cloudinary.config({
       cloud_name: process.env.CLOUD_NAME,
@@ -11,20 +12,14 @@ const imageUpload = async (req, folder) => {
     });
 
     imageData = await cloudinary.uploader.upload(
-      `${process.env.DIRECTORY_PATH}/${req.file.filename}.jpg`,
+      `${process.env.DIRECTORY_PATH}/${req.file.filename}`,
       {
         folder: folder,
         resource_type: 'image',
       }
     );
   }
-  //console.log(req.file);
   return imageData.secure_url;
-  // try {
-  // } catch (error) {
-  //   console.log('Failed to upload image.', error.message);
-  //   return;
-  // }
 };
 
 module.exports = imageUpload;

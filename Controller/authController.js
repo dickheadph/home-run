@@ -14,15 +14,15 @@ exports.userSignup = AsyncHandler(async (req, res, next) => {
     throw new Error('Email already in use. Please use another account.');
   }
 
-  req.file.filename = `${name.split(' ')[0]}-${parseInt(
-    Date.now() / 1000,
-    10
-  )}`;
-  sharp(req.file.buffer)
-    .resize(500, 500)
-    .toFormat('jpg')
-    .jpeg({ quality: 50 })
-    .toFile(`${process.env.DIRECTORY_PATH}/${req.file.filename}.jpg`);
+  // req.file.filename = `${name.split(' ')[0]}-${parseInt(
+  //   Date.now() / 1000,
+  //   10
+  // )}`;
+  // sharp(req.file.buffer)
+  //   .resize(500, 500)
+  //   .toFormat('jpg')
+  //   .jpeg({ quality: 50 })
+  //   .toFile(`${process.env.DIRECTORY_PATH}/${req.file.filename}.jpg`);
 
   const imageUrl = await imageUpload(req, 'Users_Homerun');
   //Create user profile
