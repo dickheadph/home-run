@@ -22,12 +22,12 @@ exports.getSingleProject = AsyncHandler(async (req, res, next) => {
 exports.addProject = AsyncHandler(async (req, res, next) => {
   const { name, type, category, author } = req.body;
 
-  // req.file.filename = `${name}`;
-  // sharp(req.file.buffer)
-  //   .toFormat('jpg')
-  //   .jpeg({ quality: 50 })
-  //   //.toFile(`${process.env.DIRECTORY_PATH}/${req.file.filename}.jpg`);
-  //   .toFile(`${process.env.DIRECTORY_PATH}/${req.file.filename}.jpg`);
+  req.file.filename = `${name}`;
+  sharp(req.file.buffer)
+    .toFormat('jpg')
+    .jpeg({ quality: 50 })
+    //.toFile(`${process.env.DIRECTORY_PATH}/${req.file.filename}.jpg`);
+    .toFile(`${process.env.DIRECTORY_PATH}/${req.file.filename}.jpg`);
 
   const imageUrl = await imageUpload(req, 'Homerun');
 
