@@ -9,9 +9,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: [
+      'https://homerun-eight.vercel.app',
       'http://localhost:3000',
       'http://localhost:3001',
-      'https://homerun-eight.vercel.app/',
       'https://home-run.onrender.com',
     ],
   })
