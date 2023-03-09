@@ -28,3 +28,17 @@ exports.getOneUser = AsyncHandler(async (req, res, next) => {
     user,
   });
 });
+
+exports.getProfile = AsyncHandler(async (req, res, next) => {
+  //console.log(req.params.profileId);
+  const profile = await User.findById(req.params.profileId);
+  //console.log(user);
+  if (!profile) {
+    throw new Error('No User found with that Id');
+  }
+
+  res.status(200).json({
+    message: 'success',
+    profile,
+  });
+});

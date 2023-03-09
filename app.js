@@ -10,6 +10,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:3000',
+      'http://localhost:3001',
       'https://homerun-eight.vercel.app/',
       'https://home-run.onrender.com',
     ],
@@ -17,9 +18,16 @@ app.use(
 );
 const projectRoute = require('./Routes/projectRoute');
 const usersRoute = require('./Routes/userRoute');
+const profileRoute = require('./Routes/profileRoute');
 
+app.get('/', (req, res) => {
+  res.send(
+    '<div><h1 > WELCOME TO HOMERUN: CONTRUCTION & ARCHITECTURE API!!!</h1 ><h3>You can test the API by firing the ff. end points. Have fun!</h3><br/><p><em>(Please use INSOMNIA/POSTMAN for testing.XD)</em></p><br/><p>Endoint: <a href="https://home-run.onrender.com">https://home-run.onrender.com</a></p><ul><label>GET ALL Projects</label><li>/homerun/projects</li><label>GET ALL Users</label><li>/homerun/users</li></ul><br/><p>GET by TYPE/CATEGORY</p><ul><label>GET ALL Architectures</label><li>/homerun/architectures</li><label>GET ALL Planning/Layout</label><li>/homerun/planning</li><label>GET ALL Construction</label><li>/homerun/construction</li></ul></div > '
+  );
+});
 app.use('/homerun/projects', projectRoute);
 app.use('/homerun/users', usersRoute);
+app.use('/homerun/profile', profileRoute);
 
 app.all('*', (err, req, res, next) => {
   return next(

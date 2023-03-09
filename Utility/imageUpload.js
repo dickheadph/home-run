@@ -13,9 +13,9 @@ const imageUpload = async (req, folder) => {
       folder: folder,
       resource_type: 'image',
     });
-    console.log(req.file);
+    //console.log(req.file);
   }
-  return imageData.secure_url;
+  return imageData;
 };
 
 module.exports = imageUpload;

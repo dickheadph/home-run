@@ -23,27 +23,34 @@ exports.userSignup = AsyncHandler(async (req, res, next) => {
   //   .toFormat('jpg')
   //   .jpeg({ quality: 50 })
   //   .toFile(`${process.env.DIRECTORY_PATH}/${req.file.filename}.jpg`);
+  try {
+    const imageUrl = await imageUpload(req, 'Users_Homerun');
+    //const link = imageUrl.secure_url;
 
-  const imageUrl = await imageUpload(req, 'Users_Homerun');
-  //Create user profile
-  const newUser = await User.create({
-    name,
-    email,
-    password,
-    confirmPassword,
-    image: imageUrl,
-  });
+    //Create user profile
+    const newUser = await User.create({
+      name,
+      email,
+      password,
+      confirmPassword,
+      image: req.file
+        ? imageUrl.secure_url
+        : 'https://images.unsplash.com/photo-1641391503184-a2131018701b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NjR8fGRlZmF1bHQlMjBpbWFnZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
+    });
 
-  if (!newUser) {
-    throw new Error('Failed creating Account. Please try again.');
+    if (!newUser) {
+      throw new Error('Failed creating Account. Please try again.');
+    }
+    const token = newUser.generateJWToken(newUser.id);
+
+    res.status(201).json({
+      status: 'success',
+      token,
+      newUser,
+    });
+  } catch (error) {
+    console.log(error);
   }
-  const token = newUser.generateJWToken(newUser.id);
-
-  res.status(201).json({
-    status: 'success',
-    token,
-    newUser,
-  });
 });
 
 exports.userLogin = AsyncHandler(async (req, res, next) => {
@@ -63,6 +70,7 @@ exports.userLogin = AsyncHandler(async (req, res, next) => {
   const token = user.generateJWToken(user.id);
   res.status(200).json({
     status: 'success',
+    user: user.id,
     token,
   });
 });

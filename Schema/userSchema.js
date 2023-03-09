@@ -82,7 +82,8 @@ userSchema.methods.comparePassword = async function (
 };
 userSchema.methods.generateJWToken = function (userId) {
   return jwt.sign({ userId }, process.env.SECRET_KEY, {
-    expiresIn: Math.floor(Date.now() / 1000) + 60 * 60,
+    expiresIn: 60 * 60,
+    //expiresIn: Math.floor(Date.now() / 1000) + 60 * 60,
   });
 };
 // userSchema.methods.isTokenValid = function () {
