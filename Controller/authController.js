@@ -3,7 +3,7 @@ const AppErr = require('../Middlewares/AppError');
 const User = require('../Schema/userSchema');
 const imageUpload = require('../Utility/imageUpload');
 const jwt = require('jsonwebtoken');
-const sharp = require('sharp');
+//const sharp = require('sharp');
 
 exports.userSignup = AsyncHandler(async (req, res, next) => {
   const { name, email, password, confirmPassword } = req.body;
@@ -57,10 +57,11 @@ exports.userLogin = AsyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
   //Check for credentials validity
   if (!email && !password) {
-    return next(new Error('Please provide a valid email and password.'));
+    throw new Error('Please provide a valid email and password.');
   }
   //Get user initial data
   const user = await User.findOne({ email }).select('+password');
+  console.log(user);
   //Compare stringedPass to hashedPass
   const check = await user.comparePassword(password, user.password);
   if (!check) {
