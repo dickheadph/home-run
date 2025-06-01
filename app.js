@@ -23,7 +23,7 @@ const profileRoute = require('./Routes/profileRoute');
 
 app.get('/', (req, res) => {
   res.send(
-    '<div><h1 > WELCOME TO HOMERUN: CONTRUCTION & ARCHITECTURE API!!!</h1 ><h3>Freetier has expired. Endpoints are failing.</h3><br/><p><em>(Please use INSOMNIA/POSTMAN for testing.XD)</em></p><br/><p>Endoint: <a href="https://home-run.onrender.com">https://home-run.onrender.com</a></p><ul><label>GET ALL Projects</label><li>/homerun/projects</li><label>GET ALL Users</label><li>/homerun/users</li></ul><br/><p>GET by TYPE/CATEGORY</p><ul><label>GET ALL Architectures</label><li>/homerun/architectures</li><label>GET ALL Planning/Layout</label><li>/homerun/planning</li><label>GET ALL Construction</label><li>/homerun/construction</li></ul></div > '
+    '<div><h1 > WELCOME TO HOMERUN: CONTRUCTION & ARCHITECTURE API!!!</h1 ><h3>This runs oon freetier so expect slowness.</h3><br/><p><em>(Please use INSOMNIA/POSTMAN for testing.XD)</em></p><br/><p>Endoint: <a href="https://home-run.onrender.com">https://home-run.onrender.com</a></p><ul><label>GET ALL Projects</label><li>/homerun/projects</li><label>GET ALL Users(Admin only)</label><li>/homerun/users</li></ul><br/><p>GET by TYPE/CATEGORY</p><ul><label>GET ALL Architectures</label><li>/homerun/architectures</li><label>GET ALL Planning/Layout</label><li>/homerun/planning</li><label>GET ALL Construction</label><li>/homerun/construction</li></ul></div > '
   );
 });
 app.use('/homerun/projects', projectRoute);
